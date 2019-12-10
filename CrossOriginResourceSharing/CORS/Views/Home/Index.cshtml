@@ -1,0 +1,43 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <td>Id</td>
+            <td>Name</td>
+            <td>CategoryId</td>
+            <td>Quantity</td>
+            <td>Price</td>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+            GetProducts();
+        });
+
+        function GetProducts() {
+            $.ajax({
+                url: "https://localhost:44319/api/products",
+                contentType: "application/json; charset = UTF-8"
+            }).done(function (response) {
+                $.each(response, function (i, val) {
+                    $("tbody").append(
+                        `<tr><td>${val.Id}</td><td>${val.Name}</td><td>${val.CategoryId}</td><td>${val.Quantity}</td><td>${val.Price}</td></tr>`);
+                });
+            }).fail(function () {
+                alert("hataa");
+            });
+        }
+    </script>
+}

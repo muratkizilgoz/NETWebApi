@@ -1,0 +1,1 @@
+﻿<%@ Application Codebehind="Global.asax.cs" Inherits="CircularReferenceHandling.WebApiApplication" Language="C#" %>

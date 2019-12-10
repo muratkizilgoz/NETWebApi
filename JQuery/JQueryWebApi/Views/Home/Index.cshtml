@@ -1,0 +1,128 @@
+﻿<div class="row">
+    <div class="col-md-6">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Product Name</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td></td></tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="col-md-6">
+        <form method="post" id="formProduct" name="formProduct">
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Name</label>
+                <input type="text" name="name" value="" class="form-control" placeholder="Product Name" />
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Quantity</label>
+                <input type="number" name="quantity" value="" class="form-control" placeholder="Quantity" />
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Price</label>
+                <input type="number" name="price" value="" class="form-control" placeholder="Price" step="any" min="0" />
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Kategori</label>
+                <select class="form-control" id="categoryid" name="categoryid">
+                    <option value="1">Bilgisayar</option>
+                    <option value="2">Telefon</option>
+                </select>
+            </div>
+            <button class="btn btn-success" type="submit">Save</button>
+        </form>
+    </div>
+
+</div>
+
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+            GetProducts();
+            PostForm();
+
+        });
+
+        function GetProducts() {
+            $("tbody").empty();
+            $.ajax({
+                url: "/api/products",
+                contentType: "application/json; charset=UTF-8"
+            }).done(function (response) {
+                console.log(response);
+                $.each(response,
+                    function (i, val) {
+                        $("tbody").append("<tr><td>" + val.Name + "</td>" + "<td>" + val.Quantity + "</td>" + "<td>" + val.Price + "</td>" + "</tr>");
+                    });
+                //for (var i = 0; i < response.length; i++) {
+                //    var product = response[i];
+                //    $("tbody").append("<tr><td>"+product.Name+"</td>"+"<td>"+product.Quantity+"</td>"+"<td>"+product.Price+"</td>"+"</tr>");
+                //}
+            }).fail(function () {
+                alert("Hatalar hatalar");
+            });
+        }
+
+        function PostForm() {
+            $("#formProduct").submit(function (e) {
+                e.preventDefault();
+                var form = $(this);
+                $.ajax({
+                    method: "POST",
+                    url: "/api/products",
+                    data: form.serialize()
+                }).done(function (response,statusText,jqXhr) {
+                    console.log(response);
+                    console.log(statusText);
+                    //console.log(jqXhr);
+                    //if (jqXhr.status === 201) {
+
+                    //    GetProducts();
+                    //}
+                    if (statusText==="success") {
+                        //reset form
+                        $("#formProduct")[0].reset();
+                        GetProducts();
+                    }
+                }).fail(function () {
+                    alert("Hataa");
+                });
+
+            });
+        }
+
+
+
+        function PostProducts() {
+            var name = $("#name").val();
+            var quantity = $("#quantity").val();
+            var price = $("#price").val();
+            var categoryid = $("#categoryid").val();
+
+            var product = {
+                "name": name,
+                "quantity": quantity,
+                "price": price,
+                "categoryid": categoryid
+            };
+
+            $.ajax({
+                method: "POST",
+                dataType: "json",
+                url: "/api/products",
+                data: product
+            }).done(function (response) {
+                console.log(response);
+                console.log("lalallaa");
+            }).fail(function () {
+                alert("Hatalar hatalar");
+            });
+        }
+    </script>
+}

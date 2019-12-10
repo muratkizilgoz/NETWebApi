@@ -1,0 +1,1 @@
+﻿<%@ Application Codebehind="Global.asax.cs" Inherits="RouteLinkWithRouteName.WebApiApplication" Language="C#" %>
